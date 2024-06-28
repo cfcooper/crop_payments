@@ -23,13 +23,29 @@ croplist <- fsa2023[, c("cropname", "cropnametype","cropusename")]
 
 croplist <- croplist[!duplicated(croplist), ]
 specialtycroplist <- croplist[!croplist$cropusename %in% c("forage","grain","grazing","silage"),]
-specialtycroplist <- specialtycroplist[!specialtycroplist$cropname %in% c("CRP","WHEAT", "COVER CROP", "COTTON  UPLAND", "ALFALFA","BARLEY","BUCKWHEAT",
-                                                                          "CANOLA","CLOVER","CONSERVATION STEWARDSHIP PROGRAM", "CRUSTACEAN", "COTTON  ELS",
+specialtycroplist <- specialtycroplist[!specialtycroplist$cropname %in% c("CRP","WHEAT", "COVER CROP", "COTTON  UPLAND", "ALFALFA","BARLEY","","BIRDSFOOT/TREFOIL","BUCKWHEAT",
+                                                                          "CANOLA","CAMELINA","CLOVER","CONSERVATION STEWARDSHIP PROGRAM", "CRUSTACEAN", "COTTON  ELS",
                                                                           "EMERGENCY WATERSHED/FLOODPLAIN", "EQIP", "FALLOW", "FINFISH", "FLAX", "GRASSLAND RESERVE PROGRAM",
                                                                           "HEMP", "IDLE", "MILLET", "MIXED FORAGE", "MOLLUSK", "OATS", "RAPESEED", "RICE", "RICE  WILD", 
                                                                           "RYE", "SORGHUM", "SORGHUM  DUAL PURPOSE", "SORGHUM FORAGE", "SOYBEANS", "SUGARCANE", "SUNN HEMP",
                                                                           "TREES  TIMBER", "TRITICALE", "VETCH", "WETLAND BANK RESERVE", "WETLAND RESERVE PROGRAM",
-                                                                          "WILDLIFE FOOD PLOT", "WILDLIFE HABITAT INCENTIVE PROGRAM"),]
+                                                                          "WILDLIFE FOOD PLOT", "WILDLIFE HABITAT INCENTIVE PROGRAM","PEANUTS","PENNYCRESS","TOBACCO  CIGAR WRAPPER","PSYLLIUM",
+                                                                          "SKIP ROWS","WATER IMPOUNDMENT STRUCTURE","WATERBANK"),]
+
+specialtycroplist$code <- paste(specialtycroplist$cropname,specialtycroplist$cropnametype,sep="_")
+specialtycroplist <- specialtycroplist[!specialtycroplist$code %in% c("CORN_YELLOW","CORN_ORNAMENTAL","CORN_POPCORN","CORN_CORN NUTS",
+                                                                      "CORN_TROPICAL","CORN_WHITE","CORN_BLUE","CORN_STRAWBERRY POPCORN","BEANS_BUTTER",
+                                                                      "BEANS_PINTO", "BEANS_FLAT SMALL WHITE","BEANS_GARBANZO  LG KABULI (CHICKPEAS)",
+                                                                      "BEANS_CRANBERRY","BEANS_CANARIO - YELLOW","BEANS_GARBANZO  SM DESI (CHICKPEAS)","BEANS_FAVA/FABA",
+                                                                      "BEANS_LUPINE","BEANS_YELLOW EYE","BEANS_SMALL RED","BEANS_ANASAZI","BEANS_GREAT NORTHERN",
+                                                                      "BEANS_POLE","BEANS_BLACK TURTLE","BEANS_DARK RED KIDNEY","BEANS_MAYOCOBA","BEANS_LIGHT RED KIDNEY",
+                                                                      "BEANS_GARBANZO  SM KABULI (CHICKPEAS)","BEANS_KENTUCKY BLUE","BEANS_SHELLI",
+                                                                      "BEANS_WING","BEANS_YARDLONG","BEANS_ADZUKI","BEANS_SMALL WHITE/NAVY",
+                                                                      "BEANS_PINK","BEANS_ROMA","BEANS_WHITE KIDNEY","BEANS_MUNG","BEANS_LONG",
+                                                                      "BEANS_WHITE HALF RUNNER","BEANS_JACOBS CATTLE","BEANS_SOLDIER","BEANS_CHINESE STRING",
+                                                                      "BEANS_OCTOBER","BEANS_PAPDAI VALOR","BEANS_KINTOKI","BEANS_TEBO","SUNFLOWERS_SUNFLOWER OIL",""),]
+specialtycroplist$code <- paste(specialtycroplist$cropname,specialtycroplist$cropusename,sep="_")
+specialtycroplist <- specialtycroplist[!specialtycroplist$code %in% c("GRASS_left standing","GRASS_seed","GRASS_green manure","GRASS_processed"),]
 
 specialtycroplist$type <- "S"
 fsa2023_spec <- left_join(fsa2023,specialtycroplist)
