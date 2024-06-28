@@ -75,19 +75,28 @@ countydat$code <- paste(countydat$region,countydat$subregion,sep="_")
 lookupcode <- split(county_cropratio$percent, county_cropratio$code)
 countydat$percent <- ifelse(countydat$code %in% names(lookupcode), unlist(lookupcode[countydat$code]), "")
 countydat$percent <- as.numeric(countydat$percent)
+countydat$factor <- ifelse(isna(countydat$percent), "0","0")
+countydat$factor <- ifelse(countydat$percent < 5, "1","0")
+countydat$factor <- ifelse(countydat$percent > 5 & countydat$percent < 10, "2",countydat$factor)
+countydat$factor <- ifelse(countydat$percent > 10 & countydat$percent < 20, "3",countydat$factor)
+countydat$factor <- ifelse(countydat$percent > 20 & countydat$percent < 50, "4",countydat$factor)
+countydat$factor <- ifelse(countydat$percent > 50, "5",countydat$factor)
 
+countydat$factor = factor(countydat$factor, levels = c("1","2", "3", "4", "5"))
+vcolors <- c("#ffc9bb","#ff9090","#ff5757","#D32431","#910000")
 
 s <- ggplot() +
   geom_polygon(data = statedat, aes(x = long, y = lat, group = group), fill = "light grey", color = "white")
 s
 
-c <- ggplot() + geom_polygon(data = countydat, aes(x = long, y = lat, group = group,fill = percent), color = "white", size = .08) +
+c <- ggplot() + geom_polygon(data = countydat, aes(x = long, y = lat, group = group,fill = factor), color = "white", size = .08) +
   coord_map()+
-  theme_void() +
+  theme_void() + scale_fill_manual(values=vcolors, name="Specialty Acres Percentage") +
   labs(
     title = "Specialty Crop Production",
     subtitle = "Percentage of County Ag Land in Specialty Crop Production"
   )
 c
 
+countyonly <- select(fsa2023, c("code","fips","soypercentbin", "soybeanpercent"))
 
