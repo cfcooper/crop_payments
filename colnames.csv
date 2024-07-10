@@ -1,0 +1,29 @@
+old,new
+V1,Commodity Year
+V2,Location State Code
+V3,Location State Abbreviation
+V4,Location County Code
+V5,Location County Name
+V6,Commodity Code
+V7,Commodity Name
+V8,Insurance Plan Code
+V9,Insurance Plan Name Abbreviation
+V10,Coverage Category
+V11,Delivery Type
+V12,Coverage Level
+V13,Policies Sold Count
+V14,Policies Earning Premium Count
+V15,Policies Indemnified Count
+V16,Units Earning Premium Count
+V17,Units Indemnified Count
+V18,Quantity Type
+V19,Net Reported Quantity
+V20,Endorsed/Companion Acres
+V21,Liability Amount ($)
+V22,Total Premium Amount ($)
+V23,Subsidy Amount ($)
+V24,State/Private Subsidy ($)
+V25,Additional Subsidy ($)
+V26,EFA Premium Discount ($)
+V27,Indemnity Amount ($)
+V28,Loss Ratio
