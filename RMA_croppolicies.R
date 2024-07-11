@@ -15,29 +15,28 @@ rm(list=ls()) # Caution: this clears the Environment
 
 ## upload files
 
-RMASOB <- read.csv("RMA_SOB.csv")
+
 croplist <- read.csv("croptypelist.csv")
 
+RMASOB <- list.files(path="RMAdata", pattern="*txt", full.names = T)
+RMASOB <- lapply(RMASOB, FUN=read.delim, sep ="|", header=FALSE, dec =".")
+RMASOB <- do.call("rbind", RMASOB)
 
-RMASOB23 <- read.delim("sobcov_2023.txt", 
-                      sep ="|", header = FALSE, dec =".")
-RMASOB22 <- read.delim("sobcov_2022.txt", 
-                       sep ="|", header = FALSE, dec =".")
 
-RMASOB_comb <- rbind(RMASOB22,RMASOB23)
 
 colnames <- read.csv("colnames.csv")
 
-match(colnames[,"old"], names(RMASOB_comb))
+match(colnames[,"old"], names(RMASOB))
 
-names(RMASOB_comb)[match(colnames[,"old"], names(RMASOB_comb))] = colnames[,"new"]
+names(RMASOB)[match(colnames[,"old"], names(RMASOB))] = colnames[,"new"]
 
 
-RMASOB <- merge(RMASOB, croplist)
+#RMASOB <- merge(RMASOB, croplist)
 
-RMASOB$statename <- tolower(RMASOB$statename)
+
 RMASOB$county <- tolower(RMASOB$county)
 
+RMASOB$insuranceplanabrv <- trimws(RMASOB$insuranceplanabrv)
 
 WFRP <- RMASOB[RMASOB$insuranceplanabrv %in% c("WFRP"),]
 
@@ -54,8 +53,11 @@ RMASOB <- RMASOB[!RMASOB$commodity %in% c("All Other Commodities"),]
 
 # WFRP 
 
-WFRP_state <- WFRP %>% group_by(statename) %>% summarise(sum = sum(policiessold))
-WFRP_county <- WFRP %>% group_by(statename, county) %>% summarise(sum = sum(policiessold))
+WFRP_state <- WFRP %>% group_by(year, stateabrv) %>% summarise(sum = sum(policiessold))
+WFRP_state <- WFRP_state %>% 
+  pivot_wider(names_from = year, values_from = sum)
+WFRP_state[is.na(WFRP_state)] <- 0
+WFRP_county <- WFRP %>% group_by(year, stateabrv, county) %>% summarise(sum = sum(policiessold))
 
 sum(WFRP_state$sum)
 

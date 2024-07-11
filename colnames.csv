@@ -1,17 +1,17 @@
 old,new
-V1,Commodity Year
-V2,Location State Code
-V3,Location State Abbreviation
-V4,Location County Code
-V5,Location County Name
-V6,Commodity Code
-V7,Commodity Name
-V8,Insurance Plan Code
-V9,Insurance Plan Name Abbreviation
+V1,year
+V2,statecode
+V3,stateabrv
+V4,countycode
+V5,county
+V6,commoditycode
+V7,commodity
+V8,insuranceplancode
+V9,insuranceplanabrv
 V10,Coverage Category
 V11,Delivery Type
 V12,Coverage Level
-V13,Policies Sold Count
+V13,policiessold
 V14,Policies Earning Premium Count
 V15,Policies Indemnified Count
 V16,Units Earning Premium Count
