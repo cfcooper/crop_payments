@@ -11,7 +11,6 @@ library(viridis)
 
 rm(list=ls()) # Caution: this clears the Environment
 
-#windowsFonts(A = windowsFont("Times New Roman"))
 
 ## upload files
 
@@ -30,8 +29,8 @@ match(colnames[,"old"], names(RMASOB))
 
 names(RMASOB)[match(colnames[,"old"], names(RMASOB))] = colnames[,"new"]
 
-
-#RMASOB <- merge(RMASOB, croplist)
+RMASOB$commodity <- trimws(RMASOB$commodity)
+RMASOB <- left_join(RMASOB, croplist)
 
 
 RMASOB$county <- tolower(RMASOB$county)
@@ -40,8 +39,11 @@ RMASOB$insuranceplanabrv <- trimws(RMASOB$insuranceplanabrv)
 
 WFRP <- RMASOB[RMASOB$insuranceplanabrv %in% c("WFRP"),]
 
-RMASOB <- RMASOB[!RMASOB$croptype %in% c("non"),]
-RMASOB <- RMASOB[!RMASOB$commodity %in% c("All Other Commodities"),]
+RMA_sum <- RMASOB %>% group_by(insuranceplanabrv) %>% summarise(sum = sum(policiessold))
+
+
+#RMASOB <- RMASOB[!RMASOB$croptype %in% c("non"),]
+#RMASOB <- RMASOB[!RMASOB$commodity %in% c("All Other Commodities"),]
 
 
 # general insurance
@@ -54,15 +56,17 @@ RMASOB <- RMASOB[!RMASOB$commodity %in% c("All Other Commodities"),]
 # WFRP 
 
 WFRP_state <- WFRP %>% group_by(year, stateabrv) %>% summarise(sum = sum(policiessold))
+WFRP_year <- WFRP %>% group_by(year) %>% summarise(sum = sum(policiessold))
+sum(WFRP_state$sum)
+mean(WFRP_year$sum)
 WFRP_state <- WFRP_state %>% 
   pivot_wider(names_from = year, values_from = sum)
 WFRP_state[is.na(WFRP_state)] <- 0
 WFRP_county <- WFRP %>% group_by(year, stateabrv, county) %>% summarise(sum = sum(policiessold))
 
-sum(WFRP_state$sum)
+
 
 # WFRP map
-
 
 countydat <- map_data("county")
 statedat <- map_data("state")
@@ -88,6 +92,25 @@ c <- ggplot() + geom_polygon(data = statedat, aes(x = long, y = lat, group = gro
     subtitle = "x x x"
   )
 c
+
+# yearly participation
+
+
+
+
+year <- ggplot() + geom_line(data = WFRP_year, aes(x = year, y = sum), color = "#718355") +
+  theme_classic() +
+  labs(
+    title = "WFRP Annual Participation",
+    subtitle = "All WFRP policies by year",
+    y = "policies"
+  )
+year
+
+
+
+
+
 
 
 # state map
